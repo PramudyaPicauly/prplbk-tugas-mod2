@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { dataAegis } from "./data";
+import Card from "./components/Card";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [dataAegisFiltered, setDataAegisFiltered] = useState([]);
+	const [keyword, setKeyword] = useState([]);
+	const [isSearching, setIsSearching] = useState(false);
+
+	const keywordHandler = (e) => {
+		setKeyword(e.target.value);
+	};
+
+	const searchHandler = (e) => {
+		e.preventDefault();
+		setIsSearching(true);
+		setDataAegisFiltered(
+			dataAegis.filter((data) =>
+				data.nama_lengkap.toLowerCase().includes(keyword.toLowerCase())
+			)
+		);
+	};
+
+	return (
+		<>
+			<form className="form-container" onSubmit={searchHandler}>
+				<input type="text" onChange={keywordHandler} />
+				<button type="submit">Cari</button>
+			</form>
+			{isSearching && <Card data={dataAegisFiltered} />}
+		</>
+	);
 }
 
 export default App;
